@@ -47,29 +47,66 @@ public class CategoryManageController {
         }
     }
 
+
     /**
-     * 更新分类
+     * 更新categoryName
      * @param session
      * @param categoryId
      * @param categoryName
      * @return
      */
-    @RequestMapping("set_category.do")
+    @RequestMapping("set_category_name.do")
     @ResponseBody
-    public ServerRespons setCategory(HttpSession session,Integer categoryId,String categoryName){
+    public ServerRespons setCategoryName(HttpSession session,Integer categoryId,String categoryName){
 
         User user = (User)session.getAttribute(Const.CURRENT_USER);
         if(user == null){
             return ServerRespons.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),"用户未登录请先登录");
         }
         if(iUserService.checkAdminRole(user).isSuccess()){
-            //更新category
+            //更新categoryName
             return iCategoryService.updateCategory(categoryId,categoryName);
         }else {
             return ServerRespons.createByErrorMessage("无权操作,不是管理员");
         }
     }
 
-
+    /**
+     * 查询子节点的信息
+     * @param session
+     * @param categoryId
+     * @return
+     */
+    @RequestMapping("get_category.do")
+    @ResponseBody
+    public ServerRespons getChildrenParallelCategory(HttpSession session,@RequestParam(value = "categoryId",defaultValue = "0") Integer categoryId){
+        User user = (User)session.getAttribute(Const.CURRENT_USER);
+        if(user == null){
+            return ServerRespons.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),"用户未登录，请先登录");
+        }
+        if(iUserService.checkAdminRole(user).isSuccess()){
+            //查询子节点的category信息,并且不递归,保持平级
+            return iCategoryService.getChildrenParallelCategory(categoryId);
+        }else {
+            return ServerRespons.createByErrorMessage("无权限操作，请用管理员权限");
+        }
+    }
+    /**
+     * 递归查询字节的的categoryId
+     */
+    @RequestMapping("get_deep_category.do")
+    @ResponseBody
+    public ServerRespons getCategoryAndDeepChildrenCategory(HttpSession session,@RequestParam(value = "categoryId",defaultValue = "0") Integer categoryId){
+        User user = (User)session.getAttribute(Const.CURRENT_USER);
+        if(user == null){
+            return ServerRespons.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),"用户未登录，请先登录");
+        }
+        if(iUserService.checkAdminRole(user).isSuccess()){
+            //查询当前节点的id和递归节点的id
+            return iCategoryService.selectCategoryAndDeepChildrenCategory(categoryId);
+        }else {
+            return ServerRespons.createByErrorMessage("无权限操作，请用管理员权限");
+        }
+    }
 
 }
