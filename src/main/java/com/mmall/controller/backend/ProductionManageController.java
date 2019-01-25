@@ -30,32 +30,48 @@ public class ProductionManageController {
 
     @RequestMapping("save.do")
     @ResponseBody
-    public ServerRespons productSave(HttpSession session, Product product){
-        User user = (User)session.getAttribute(Const.CURRENT_USER);
-        if(user == null){
-            return ServerRespons.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),"先登录");
+    public ServerRespons productSave(HttpSession session, Product product) {
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        if (user == null) {
+            return ServerRespons.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "先登录");
         }
-        if (iUserService.checkAdminRole(user).isSuccess()){
+        if (iUserService.checkAdminRole(user).isSuccess()) {
             //填充增加产品的业务逻辑
             return iProductService.saveOrUPdateProduct(product);
 
-        }else {
+        } else {
             return ServerRespons.createByErrorMessage("无权限操作");
         }
     }
 
     @RequestMapping("set_sale_status.do")
     @ResponseBody
-    public ServerRespons setSaleStatus(HttpSession session,Integer productId,Integer status){
-        User user = (User)session.getAttribute(Const.CURRENT_USER);
-        if(user == null){
-            return ServerRespons.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),"先登录");
+    public ServerRespons setSaleStatus(HttpSession session, Integer productId, Integer status) {
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        if (user == null) {
+            return ServerRespons.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "先登录");
+        }
+        if (iUserService.checkAdminRole(user).isSuccess()) {
+            return iProductService.setSaleStatus(productId, status);
+
+        } else {
+            return ServerRespons.createByErrorMessage("无权限操作");
+        }
+    }
+
+    @RequestMapping("get_detail.do")
+    @ResponseBody
+    public ServerRespons getDetail(HttpSession session, Integer productId) {
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        if (user == null){
+            return ServerRespons.createByErrorMessage("请先登录");
         }
         if (iUserService.checkAdminRole(user).isSuccess()){
-            return iProductService.setSaleStatus(productId,status);
-
+            return iProductService.manageProductDetail(productId);
         }else {
             return ServerRespons.createByErrorMessage("无权限操作");
         }
     }
+
+
 }
