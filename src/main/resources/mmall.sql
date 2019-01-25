@@ -284,7 +284,7 @@ CREATE TABLE `mmall_user`  (
 -- ----------------------------
 -- Records of mmall_user
 -- ----------------------------
-INSERT INTO `mmall_user` VALUES (1, 'admin', 'BBAD8D72C1FAC1D081727158807A8798', 'admin@happymmall.com', '13800138000', '这是一个问题', '答案', 1, '2016-11-06 16:56:45', '2018-03-15 17:14:38');
+INSERT INTO `mmall_user` VALUES (1, 'admin', '427338237BD929443EC5D48E24FD2B1A', 'admin@happymmall.com', '13800138000', '这是一个问题', '答案', 1, '2016-11-06 16:56:45', '2018-03-15 17:14:38');
 INSERT INTO `mmall_user` VALUES (13, 'geely', '08E9A6EA287E70E7E3F7C982BF7923AC', 'geely@happymmall.com', '13800138000', '这是两个问题', '答案', 0, '2016-11-19 22:19:25', '2016-11-19 22:19:25');
 INSERT INTO `mmall_user` VALUES (17, 'rosen', '095AC193FE2212EEC7A93E8FEFF11902', 'rosen1@happymmall.com', '13800138000', '这是多个问题', '答案', 0, '2017-03-17 10:51:33', '2017-04-09 23:13:26');
 INSERT INTO `mmall_user` VALUES (21, 'soonerbetter', 'DE6D76FE7C40D5A1A8F04213F2BEFBEE', 'test06@happymmall.com', '13800138000', '105204', '105204', 0, '2017-04-13 21:26:22', '2017-04-13 21:26:22');
