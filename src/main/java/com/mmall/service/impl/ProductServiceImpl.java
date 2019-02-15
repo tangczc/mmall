@@ -174,12 +174,13 @@ public class ProductServiceImpl implements IProductService {
             return ServerRespons.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), ResponseCode.ILLEGAL_ARGUMENT.getDesc());
         }
         Product product = productMapper.selectByPrimaryKey(productId);
+        if (product == null) {
+          return ServerRespons.createByErrorMessage("该产品已经下架或不存在");
+        }
         if (product.getStatus() != Const.ProductStatusEnum.ON_SALE.getCode()){
             return ServerRespons.createByErrorMessage("该产品已经下架或不存在");
         }
-        if (product == null) {
-            ServerRespons.createByErrorMessage("该产品已经下架或不存在");
-        }
+
         if (product.getStatus() != Const.ProductStatusEnum.ON_SALE.getCode()){
             return ServerRespons.createByErrorMessage("该产品已经下架或不存在");
         }
