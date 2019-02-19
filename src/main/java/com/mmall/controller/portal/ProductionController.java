@@ -24,4 +24,5 @@ public class ProductionController {
     public ServerRespons<ProductDetailVo> detail(Integer id) {
         return iProductService.getProductDetial(id);
     }
+
 }
