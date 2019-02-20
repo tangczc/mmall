@@ -146,8 +146,8 @@ public class OrderServiceImpl implements IOrderService {
                 String qrPath = String.format(path + "/qr-%s.png",response.getOutTradeNo());
                 String qrFileName = String.format("qr-%s.png",response.getOutTradeNo());
                 ZxingUtils.getQRCodeImge(response.getQrCode(), 256, qrPath);
-
-                File targetFile = new File(path,qrFileName);
+                //todo 暂时没有ftp服务等
+//                File targetFile = new File(path,qrFileName);
 //                try {
 //                    FTPUtil.uploadFile(Lists.newArrayList(targetFile));
 //                } catch (IOException e) {
