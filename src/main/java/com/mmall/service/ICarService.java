@@ -21,4 +21,23 @@ public interface ICarService {
      * @return
      */
     ServerRespons<CartVo> add(Integer userId, Integer productId, Integer count);
+
+    /**
+     * 更新购物车
+     *
+     * @param userId
+     * @param productId
+     * @param count
+     * @return
+     */
+    ServerRespons<CartVo> update(Integer userId, Integer productId, Integer count);
+
+    /**
+     * 删除产品
+     *
+     * @param userId
+     * @param productIds
+     * @return
+     */
+    ServerRespons<CartVo> delete(Integer userId, String productIds);
 }

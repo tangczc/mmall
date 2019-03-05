@@ -1,5 +1,6 @@
 package com.mmall.service.impl;
 
+import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.mmall.common.Const;
 import com.mmall.common.ResponseCode;
@@ -57,6 +58,32 @@ public class CarServiceImp implements ICarService {
 
         return ServerRespons.createBySuccess(cartVo);
     }
+
+
+    public ServerRespons<CartVo> update(Integer userId, Integer productId, Integer count){
+        if (productId == null && count == null) {
+            return ServerRespons.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), ResponseCode.ILLEGAL_ARGUMENT.getDesc());
+        }
+        Cart cart = cartMapper.serlectCartByUserIdProducId(userId, productId);
+        if (cart != null){
+            cart.setQuantity(count);
+        }
+        cartMapper.updateByPrimaryKey(cart);
+        CartVo cartVo = this.getCartVo(userId);
+        return ServerRespons.createBySuccess(cartVo);
+
+    }
+
+    public ServerRespons<CartVo> delete(Integer userId, String productIds){
+        List<String> productLits = Splitter.on(",").splitToList(productIds);
+        if(CollectionUtils.isEmpty(productLits)){
+            return ServerRespons.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), ResponseCode.ILLEGAL_ARGUMENT.getDesc());
+        }
+        cartMapper.deleteByuserIdProductIds(userId,productLits);
+        CartVo cartVo = this.getCartVo(userId);
+        return ServerRespons.createBySuccess(cartVo);
+    }
+
 
     private CartVo getCartVo(Integer userId) {
         List<Cart> cartList = cartMapper.selectCartByUserId(userId);
@@ -118,5 +145,8 @@ public class CarServiceImp implements ICarService {
         }
         return cartMapper.selectCartProductCheckedStatusByUserId(userId) == 0;
     }
+
+
+
 
 }
