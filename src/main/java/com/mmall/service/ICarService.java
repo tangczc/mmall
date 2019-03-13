@@ -40,4 +40,30 @@ public interface ICarService {
      * @return
      */
     ServerRespons<CartVo> delete(Integer userId, String productIds);
+
+    /**
+     * 查询产品
+     *
+     * @param userId
+     * @return
+     */
+    ServerRespons<CartVo> list(Integer userId);
+
+    /**
+     * 全选 全反选
+     *
+     * @param userId
+     * @param checked
+     * @return
+     */
+    ServerRespons<CartVo> selectOrUnselectAll(Integer userId, Integer productId, Integer checked);
+
+
+    /**
+     * 查询购物车商品数量
+     *
+     * @param userId
+     * @return
+     */
+    ServerRespons<Integer> getCartProductCount(Integer userId);
 }

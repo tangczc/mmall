@@ -33,6 +33,7 @@ public class CarServiceImp implements ICarService {
     @Autowired
     ProductMapper productMapper;
 
+    @Override
     public ServerRespons<CartVo> add(Integer userId, Integer productId, Integer count) {
 
         if (productId == null && count == null) {
@@ -54,34 +55,51 @@ public class CarServiceImp implements ICarService {
             cart.setQuantity(count);
             cartMapper.updateByPrimaryKey(cart);
         }
-        CartVo cartVo = this.getCartVo(userId);
-
-        return ServerRespons.createBySuccess(cartVo);
+        return this.list(userId);
     }
 
-
-    public ServerRespons<CartVo> update(Integer userId, Integer productId, Integer count){
+    @Override
+    public ServerRespons<CartVo> update(Integer userId, Integer productId, Integer count) {
         if (productId == null && count == null) {
             return ServerRespons.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), ResponseCode.ILLEGAL_ARGUMENT.getDesc());
         }
         Cart cart = cartMapper.serlectCartByUserIdProducId(userId, productId);
-        if (cart != null){
+        if (cart != null) {
             cart.setQuantity(count);
         }
         cartMapper.updateByPrimaryKey(cart);
-        CartVo cartVo = this.getCartVo(userId);
-        return ServerRespons.createBySuccess(cartVo);
+        return this.list(userId);
 
     }
 
-    public ServerRespons<CartVo> delete(Integer userId, String productIds){
+    @Override
+    public ServerRespons<CartVo> delete(Integer userId, String productIds) {
         List<String> productLits = Splitter.on(",").splitToList(productIds);
-        if(CollectionUtils.isEmpty(productLits)){
+        if (CollectionUtils.isEmpty(productLits)) {
             return ServerRespons.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), ResponseCode.ILLEGAL_ARGUMENT.getDesc());
         }
-        cartMapper.deleteByuserIdProductIds(userId,productLits);
-        CartVo cartVo = this.getCartVo(userId);
-        return ServerRespons.createBySuccess(cartVo);
+        cartMapper.deleteByuserIdProductIds(userId, productLits);
+        return this.list(userId);
+    }
+
+    @Override
+    public ServerRespons<CartVo> list(Integer userId) {
+        return ServerRespons.createBySuccess(this.getCartVo(userId));
+    }
+
+    @Override
+    public ServerRespons<CartVo> selectOrUnselectAll(Integer userId, Integer productId, Integer checked) {
+        cartMapper.checkOrUncheckedProduct(userId, productId, checked);
+        return this.list(userId);
+
+    }
+
+    @Override
+    public ServerRespons<Integer> getCartProductCount(Integer userId) {
+        if (userId == null) {
+            return ServerRespons.createBySuccess(0);
+        }
+        return ServerRespons.createBySuccess(cartMapper.selectCartProductCount(userId));
     }
 
 
@@ -145,8 +163,6 @@ public class CarServiceImp implements ICarService {
         }
         return cartMapper.selectCartProductCheckedStatusByUserId(userId) == 0;
     }
-
-
 
 
 }
